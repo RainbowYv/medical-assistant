@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: medical_assistant-chat-mongo
+    restart: always
+    environment:
+      # MongoDB 物理机的管理员账号
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      # 启动时自动创建的业务数据库
+      MONGO_INITDB_DATABASE: medical_assistant_chat_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./ChatMemory:/data/db
+
+  # --- 新增 MySQL 服务 ---
+  mysql:
+    image: mysql:8.0
+    container_name: medical-assistant-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: medical_assistant
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+    volumes:
+      - ./UserMedicalInformation:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
