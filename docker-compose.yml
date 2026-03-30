@@ -6,17 +6,14 @@ services:
     container_name: medical_assistant-chat-mongo
     restart: always
     environment:
-      # MongoDB 物理机的管理员账号
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
-      # 启动时自动创建的业务数据库
       MONGO_INITDB_DATABASE: medical_assistant_chat_db
     ports:
       - "27017:27017"
     volumes:
-      - ./ChatMemory:/data/db
+      - ./mongoDB:/data/db
 
-  # --- 新增 MySQL 服务 ---
   mysql:
     image: mysql:8.0
     container_name: medical-assistant-mysql
@@ -28,9 +25,28 @@ services:
     ports:
       - "3307:3306"
     command:
-      --default-authentication-plugin=mysql_native_password
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_general_ci
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
     volumes:
-      - ./UserMedicalInformation:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
+      # 挂载 sql 目录，MySQL 启动时会自动运行里面的 .sql 文件
       - ./sql:/docker-entrypoint-initdb.d
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant_server
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant/storage:/qdrant/storage
+    environment:
+      - TZ=Asia/Shanghai
+      - QDRANT__TELEMETRY_DISABLED=true
+      - QDRANT__LOG_LEVEL=INFO
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    restart: always

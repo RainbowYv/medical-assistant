@@ -1,0 +1,60 @@
+# 自定义医疗助手配置
+medical:
+  assistant:
+    name: 硅谷小智
+    hospital: 北京协和医院
+  knowledge:
+    path: D:\JavaProjects\medical-assistent-ai\knowledge
+
+# Ollama 配置
+ollama:
+  base-url: http://localhost:11434
+  embedding-model:
+    name: nomic-embed-text
+    timeout: 60s
+
+# Qdrant 向量数据库配置
+qdrant:
+  host: localhost
+  port: 6334
+  collection-name: medical_knowledge
+  api-key: 123456
+  dimension: 768
+
+server:
+  port: 8080
+
+langchain4j:
+  open-ai:
+    chat-model:
+      api-key:
+      model-name: Qwen/Qwen3.5-35B-A3B
+      base-url: https://api-inference.modelscope.cn/v1/
+      log-requests: true
+      log-responses: true
+
+mybatis-plus:
+  configuration:
+    # 开启控制台 SQL 日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+logging:
+  level:
+    root: info
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: medical_assistant_chat_db
+      username: 'root'
+      password: '123456'
+      authentication-database: 'admin'
+  datasource:
+    url: jdbc:mysql://localhost:3307/medical_assistant?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+
+
