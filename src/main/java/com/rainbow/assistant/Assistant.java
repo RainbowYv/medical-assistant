@@ -11,7 +11,8 @@ import static dev.langchain4j.service.spring.AiServiceWiringMode.EXPLICIT;
         wiringMode = EXPLICIT,
         chatModel = "openAiChatModel",
         chatMemoryProvider = "chatMemory",
-        tools = "appointmentTools"
+        tools = "appointmentTools",
+        retrievalAugmentor = "retrievalAugmentor"
 )
 public interface Assistant {
     @SystemMessage(fromResource = "system-prompt-template.txt")
